@@ -1,0 +1,14 @@
+{
+  "name": "allocra",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Configurable, constraint-aware resource allocation and scheduling platform",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
