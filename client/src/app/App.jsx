@@ -2,6 +2,7 @@
 import { checkHealth } from '../api/health';
 import InstitutionView from '../features/institution/InstitutionView';
 import AcademicStructureView from '../features/academic-structure/AcademicStructureView';
+import TermsAndGroupsView from '../features/academic-context/TermsAndGroupsView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -43,6 +44,12 @@ export default function App() {
           >
             Academic Structure
           </button>
+          <button
+            className={`allocra-nav-item ${activeTab === 'terms-and-groups' ? 'active' : ''}`}
+            onClick={() => setActiveTab('terms-and-groups')}
+          >
+            Terms & Groups
+          </button>
         </aside>
 
         <main className="allocra-content">
@@ -61,6 +68,10 @@ export default function App() {
 
           {activeTab === 'academic-structure' && (
             <AcademicStructureView />
+          )}
+
+          {activeTab === 'terms-and-groups' && (
+            <TermsAndGroupsView />
           )}
         </main>
       </div>
