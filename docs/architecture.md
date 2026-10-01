@@ -1,4 +1,4 @@
-﻿# Allocra Architecture
+# Allocra Architecture
 
 ## Product Identity
 Allocra — Configurable, constraint-aware resource allocation and scheduling platform.
@@ -16,6 +16,7 @@ React UI -> Express API -> Domain Modules -> Data / Persistence -> MongoDB
 - **Institution** (Identity and setup)
 - **Academic Structure** (Departments and Programs matching the institution scope)
 - **Academic Context** (Terms and Groups/Batches linked to Programs and Terms)
+- **Calendar** (Working days available for scheduling at the institution scope)
 - **Resources** (Rooms, faculty, equipment)
 - **Activities** (Lectures, labs)
 - **Scheduling** (Timetable generation)
@@ -28,6 +29,7 @@ React UI -> Express API -> Domain Modules -> Data / Persistence -> MongoDB
 - **Program**: `name`, `departmentId`, `institutionId`
 - **Term**: `name`, `academicYear`, `institutionId`
 - **Group**: `name`, `programId`, `termId`, `institutionId`
+- **Calendar**: `institutionId`, `workingDays`
 
 ## Rules
 - Domain logic must not depend directly on React, HTTP details, or MongoDB specifics.

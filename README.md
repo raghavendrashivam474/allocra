@@ -1,4 +1,4 @@
-﻿# Allocra
+# Allocra
 
 > Academic Timetable & Resource Allocation Engine
 
@@ -6,12 +6,12 @@ Allocra is an academic scheduling and allocation platform designed to automate a
 
 ---
 
-## Current Status: Phase 1 — S1.2 (`v1.2`)
+## Current Status: Phase 1 — S1.3 (`v1.3`)
 
 - **Backend:** Node.js (ESM), Express, MongoDB / Mongoose
 - **Frontend:** React 18, Vite
 - **Testing:** Vitest, Supertest, MongoDB Memory Server, React Testing Library, jsdom
-- **Current Slice:** Health Check, Institution Configuration, Academic Structure (Departments & Programs), Academic Context (Terms & Groups/Batches), automated regression test suite (64 tests).
+- **Current Slice:** Health Check, Institution Configuration, Academic Structure (Departments & Programs), Academic Context (Terms & Groups/Batches), Calendar Configuration (Working Days), automated regression test suite (80 tests).
 
 ---
 
@@ -50,7 +50,7 @@ MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.mongodb.net/allocra?retryWr
 
 ### 3. Run Automated Tests
 
-Execute the full regression test suite (64 tests across backend & frontend):
+Execute the full regression test suite (80 tests across backend & frontend):
 
 ```Bash
 npm test
@@ -86,16 +86,16 @@ Open http://localhost:5173 in your browser.
 allocra/
 ├── client/                     # Frontend (React + Vite)
 │   ├── src/
-│   │   ├── api/                # API client modules (health, institution, academicStructure, academicContext)
+│   │   ├── api/                # API client modules (health, institution, academicStructure, academicContext, calendar)
 │   │   ├── app/                # Root App component & styles
-│   │   ├── features/           # Feature modules (institution, academic-structure, academic-context)
+│   │   ├── features/           # Feature modules (institution, academic-structure, academic-context, calendar)
 │   │   └── test/               # Frontend test setup
 │   └── vite.config.js
 ├── server/                     # Backend (Express + Mongoose)
-│   ├── controllers/            # Request handlers (institution, department, program, term, group)
+│   ├── controllers/            # Request handlers (institution, department, program, term, group, calendar)
 │   ├── core/                   # Domain services (HTTP-agnostic)
-│   │   └── institution/        # Institution, Academic Structure, Academic Context services
-│   ├── data/                   # Models (Institution, Department, Program, Term, Group) & DB connection
+│   │   └── institution/        # Institution, Academic Structure, Academic Context, Calendar services
+│   ├── data/                   # Models (Institution, Department, Program, Term, Group, Calendar) & DB connection
 │   ├── routes/                 # Express route definitions
 │   ├── tests/                  # Automated backend test suite
 │   ├── app.js                  # Express app setup
@@ -112,7 +112,7 @@ allocra/
 ## Architecture & API Boundaries
 
 - **Route Layer** (`server/routes/`): Maps HTTP paths to controller handlers (/api/institution,
-   /api/departments, /api/programs, /api/terms, /api/groups).
+   /api/departments, /api/programs, /api/terms, /api/groups, /api/calendar).
 - **Controller Layer** (`server/controllers/`): Handles HTTP request parsing and response statuses.
 - **Domain Service Layer** (`server/core/`): Houses business validation and relational integrity logic.
    Completely decoupled from HTTP request/response objects.
@@ -127,7 +127,10 @@ allocra/
 - **Program Domain & API Tests**: `server/tests/program.test.js`
 - **Term Domain & API Tests**: `server/tests/term.test.js`
 - **Group Domain & API Tests**: `server/tests/group.test.js`
+- **Calendar Domain & API Tests**: `server/tests/calendar.test.js`
 - **Frontend UI State Tests**:
   - `client/src/features/institution/InstitutionView.test.jsx`
   - `client/src/features/academic-structure/AcademicStructureView.test.jsx`
   - `client/src/features/academic-context/TermsAndGroupsView.test.jsx`
+  - `client/src/features/calendar/CalendarView.test.jsx`
+
