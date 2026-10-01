@@ -1,14 +1,23 @@
 {
   "name": "allocra",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "Configurable, constraint-aware resource allocation and scheduling platform",
+  "description": "Allocra - Academic Scheduling & Allocation Engine",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd server && npm run dev",
-    "dev:client": "cd client && npm run dev"
+    "test": "npm run test --prefix server && npm run test --prefix client",
+    "test:server": "npm run test --prefix server",
+    "test:client": "npm run test --prefix client",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "start:server": "npm run start --prefix server",
+    "build:client": "npm run build --prefix client"
   },
-  "devDependencies": {
-    "concurrently": "^9.1.2"
-  }
+  "keywords": [
+    "timetable",
+    "scheduling",
+    "academic",
+    "allocation"
+  ],
+  "author": "",
+  "license": "ISC"
 }
