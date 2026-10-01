@@ -1,6 +1,8 @@
 ﻿import express from 'express';
 import cors from 'cors';
 import institutionRoutes from './routes/institutionRoutes.js';
+import departmentRoutes from './routes/departmentRoutes.js';
+import programRoutes from './routes/programRoutes.js';
 
 const app = express();
 
@@ -18,6 +20,10 @@ app.get('/api/health', (req, res) => {
 
 // S0.3.4: Institution API
 app.use('/api/institution', institutionRoutes);
+
+// S1.1: Academic Structure API
+app.use('/api/departments', departmentRoutes);
+app.use('/api/programs', programRoutes);
 
 // Centralized error handler
 app.use((err, req, res, next) => {
