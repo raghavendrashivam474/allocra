@@ -5,6 +5,7 @@ import departmentRoutes from './routes/departmentRoutes.js';
 import programRoutes from './routes/programRoutes.js';
 import termRoutes from './routes/termRoutes.js';
 import groupRoutes from './routes/groupRoutes.js';
+import calendarRoutes from './routes/calendarRoutes.js';
 
 const app = express();
 
@@ -31,6 +32,9 @@ app.use('/api/programs', programRoutes);
 app.use('/api/terms', termRoutes);
 app.use('/api/groups', groupRoutes);
 
+// S1.3: Calendar Configuration API
+app.use('/api/calendar', calendarRoutes);
+
 // Centralized error handler
 app.use((err, req, res, next) => {
   console.error('[Server Error]', err.message || err);
@@ -39,3 +43,4 @@ app.use((err, req, res, next) => {
 });
 
 export default app;
+
