@@ -4,6 +4,7 @@ import InstitutionView from '../features/institution/InstitutionView';
 import AcademicStructureView from '../features/academic-structure/AcademicStructureView';
 import TermsAndGroupsView from '../features/academic-context/TermsAndGroupsView';
 import CalendarView from '../features/calendar/CalendarView';
+import TimeModelView from '../features/time-model/TimeModelView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -57,6 +58,12 @@ export default function App() {
           >
             Calendar
           </button>
+          <button
+            className={`allocra-nav-item ${activeTab === 'time-model' ? 'active' : ''}`}
+            onClick={() => setActiveTab('time-model')}
+          >
+            Time Model
+          </button>
         </aside>
 
         <main className="allocra-content">
@@ -83,6 +90,10 @@ export default function App() {
 
           {activeTab === 'calendar' && (
             <CalendarView />
+          )}
+
+          {activeTab === 'time-model' && (
+            <TimeModelView />
           )}
         </main>
       </div>
