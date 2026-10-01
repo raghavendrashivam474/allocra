@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { checkHealth } from '../api/health';
 import InstitutionView from '../features/institution/InstitutionView';
+import AcademicStructureView from '../features/academic-structure/AcademicStructureView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -36,6 +37,12 @@ export default function App() {
           >
             Institution
           </button>
+          <button
+            className={`allocra-nav-item ${activeTab === 'academic-structure' ? 'active' : ''}`}
+            onClick={() => setActiveTab('academic-structure')}
+          >
+            Academic Structure
+          </button>
         </aside>
 
         <main className="allocra-content">
@@ -50,6 +57,10 @@ export default function App() {
 
           {activeTab === 'institution' && (
             <InstitutionView />
+          )}
+
+          {activeTab === 'academic-structure' && (
+            <AcademicStructureView />
           )}
         </main>
       </div>
