@@ -3,6 +3,7 @@ import { checkHealth } from '../api/health';
 import InstitutionView from '../features/institution/InstitutionView';
 import AcademicStructureView from '../features/academic-structure/AcademicStructureView';
 import TermsAndGroupsView from '../features/academic-context/TermsAndGroupsView';
+import CalendarView from '../features/calendar/CalendarView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -50,6 +51,12 @@ export default function App() {
           >
             Terms & Groups
           </button>
+          <button
+            className={`allocra-nav-item ${activeTab === 'calendar' ? 'active' : ''}`}
+            onClick={() => setActiveTab('calendar')}
+          >
+            Calendar
+          </button>
         </aside>
 
         <main className="allocra-content">
@@ -72,6 +79,10 @@ export default function App() {
 
           {activeTab === 'terms-and-groups' && (
             <TermsAndGroupsView />
+          )}
+
+          {activeTab === 'calendar' && (
+            <CalendarView />
           )}
         </main>
       </div>
