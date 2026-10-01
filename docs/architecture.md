@@ -15,6 +15,7 @@ React UI -> Express API -> Domain Modules -> Data / Persistence -> MongoDB
 ## Initial Boundaries
 - **Institution** (Identity and setup)
 - **Academic Structure** (Departments and Programs matching the institution scope)
+- **Academic Context** (Terms and Groups/Batches linked to Programs and Terms)
 - **Resources** (Rooms, faculty, equipment)
 - **Activities** (Lectures, labs)
 - **Scheduling** (Timetable generation)
@@ -25,6 +26,8 @@ React UI -> Express API -> Domain Modules -> Data / Persistence -> MongoDB
 - **Institution**: `name`, `academicYear`
 - **Department**: `name`, `institutionId`
 - **Program**: `name`, `departmentId`, `institutionId`
+- **Term**: `name`, `academicYear`, `institutionId`
+- **Group**: `name`, `programId`, `termId`, `institutionId`
 
 ## Rules
 - Domain logic must not depend directly on React, HTTP details, or MongoDB specifics.
