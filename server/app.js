@@ -6,6 +6,7 @@ import programRoutes from './routes/programRoutes.js';
 import termRoutes from './routes/termRoutes.js';
 import groupRoutes from './routes/groupRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
+import timeModelRoutes from './routes/timeModelRoutes.js';
 
 const app = express();
 
@@ -35,6 +36,9 @@ app.use('/api/groups', groupRoutes);
 // S1.3: Calendar Configuration API
 app.use('/api/calendar', calendarRoutes);
 
+// S1.4: Time Model Configuration API
+app.use('/api/time-model', timeModelRoutes);
+
 // Centralized error handler
 app.use((err, req, res, next) => {
   console.error('[Server Error]', err.message || err);
@@ -43,4 +47,5 @@ app.use((err, req, res, next) => {
 });
 
 export default app;
+
 
