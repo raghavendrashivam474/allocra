@@ -3,6 +3,8 @@ import cors from 'cors';
 import institutionRoutes from './routes/institutionRoutes.js';
 import departmentRoutes from './routes/departmentRoutes.js';
 import programRoutes from './routes/programRoutes.js';
+import termRoutes from './routes/termRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';
 
 const app = express();
 
@@ -24,6 +26,10 @@ app.use('/api/institution', institutionRoutes);
 // S1.1: Academic Structure API
 app.use('/api/departments', departmentRoutes);
 app.use('/api/programs', programRoutes);
+
+// S1.2: Academic Terms & Groups API
+app.use('/api/terms', termRoutes);
+app.use('/api/groups', groupRoutes);
 
 // Centralized error handler
 app.use((err, req, res, next) => {
