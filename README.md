@@ -1,4 +1,4 @@
-# Allocra
+﻿# Allocra
 
 > Academic Timetable & Resource Allocation Engine
 
@@ -6,7 +6,7 @@ Allocra is an academic scheduling and allocation platform designed to automate a
 
 ---
 
-## Current Status: Phase 1 — S1.3 (`v1.3`)
+## Current Status: Phase 1 â€” S1.3 (`v1.3`)
 
 - **Backend:** Node.js (ESM), Express, MongoDB / Mongoose
 - **Frontend:** React 18, Vite
@@ -80,25 +80,26 @@ npm run dev:client
 Open http://localhost:5173 in your browser.
 ```
 
+
 ## Project Structure
 
 ```text
 allocra/
 ├── client/                     # Frontend (React + Vite)
 │   ├── src/
-│   │   ├── api/                # API client modules (health, institution, academicStructure, academicContext, calendar)
-│   │   ├── app/                # Root App component & styles
-│   │   ├── features/           # Feature modules (institution, academic-structure, academic-context, calendar)
+│   │   ├── api/                # API client modules (health, institution, academicStructure, academicContext, calendar, timeModel)
+│   │   ├── app/                # Root App component & navigation
+│   │   ├── features/           # Feature modules (institution, academic-structure, academic-context, calendar, time-model)
 │   │   └── test/               # Frontend test setup
 │   └── vite.config.js
 ├── server/                     # Backend (Express + Mongoose)
-│   ├── controllers/            # Request handlers (institution, department, program, term, group, calendar)
+│   ├── controllers/            # Request handlers (institution, department, program, term, group, calendar, timeModel)
 │   ├── core/                   # Domain services (HTTP-agnostic)
-│   │   └── institution/        # Institution, Academic Structure, Academic Context, Calendar services
-│   ├── data/                   # Models (Institution, Department, Program, Term, Group, Calendar) & DB connection
+│   │   └── institution/        # Institution, Academic Structure, Academic Context, Calendar, Time Model services
+│   ├── data/                   # Models (Institution, Department, Program, Term, Group, Calendar, TimeModel) & DB connection
 │   ├── routes/                 # Express route definitions
-│   ├── tests/                  # Automated backend test suite
-│   ├── app.js                  # Express app setup
+│   ├── tests/                  # Automated backend test suite (Vitest + Supertest)
+│   ├── app.js                  # Express app composition
 │   └── server.js               # Entry point & listener
 ├── docs/                       # Architecture documentation & ADRs
 │   ├── architecture.md
@@ -133,4 +134,5 @@ allocra/
   - `client/src/features/academic-structure/AcademicStructureView.test.jsx`
   - `client/src/features/academic-context/TermsAndGroupsView.test.jsx`
   - `client/src/features/calendar/CalendarView.test.jsx`
+
 
