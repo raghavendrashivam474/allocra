@@ -7,6 +7,7 @@ import termRoutes from './routes/termRoutes.js';
 import groupRoutes from './routes/groupRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
 import timeModelRoutes from './routes/timeModelRoutes.js';
+import setupRoutes from './routes/setupRoutes.js';
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/api/calendar', calendarRoutes);
 
 // S1.4: Time Model Configuration API
 app.use('/api/time-model', timeModelRoutes);
+app.use('/api/setup', setupRoutes);
 
 // Centralized error handler
 app.use((err, req, res, next) => {
