@@ -6,7 +6,7 @@ Allocra is an academic scheduling and allocation platform designed to automate a
 
 ---
 
-## Current Status: Phase 1 â€” S1.3 (`v1.3`)
+## Current Status: Phase 1 Complete — S1.5 (V1.5)
 
 - **Backend:** Node.js (ESM), Express, MongoDB / Mongoose
 - **Frontend:** React 18, Vite
@@ -134,5 +134,8 @@ allocra/
   - `client/src/features/academic-structure/AcademicStructureView.test.jsx`
   - `client/src/features/academic-context/TermsAndGroupsView.test.jsx`
   - `client/src/features/calendar/CalendarView.test.jsx`
+
+
+
 
 

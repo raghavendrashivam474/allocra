@@ -52,7 +52,7 @@ A single **TimeModel** collection is maintained:
 - **Cardinality:** 1:1 relation with an \Institution\ (referenced via unique index \institutionId\).
 - **Storage Strategy:** Nested document schema containing embedded arrays for \periods\ and \breaks\. This guarantees complete atomic state saves (no partial-update failures).
 
-\\\json
+```json
 {
   "_id": "64b0f92b...",
   "institutionId": "64b0f80a...",
@@ -66,7 +66,7 @@ A single **TimeModel** collection is maintained:
   "createdAt": "2026-03-31T...",
   "updatedAt": "2026-03-31T..."
 }
-\\\
+```
 
 ### Invariants & Validation Rules
 1. **Time Format:** Strict 24-hour \HH:mm\ validation.
@@ -77,3 +77,11 @@ A single **TimeModel** collection is maintained:
 ### API Specifications
 - **GET** \/api/time-model\ — Fetches the active time model configuration envelope (\{ timeModel: null | Document }\).
 - **PUT** \/api/time-model\ — Accepts body \{ periods: [...], breaks: [...] }\. Sanitizes, validates, sorts intervals, atomically updates or inserts (upsert) the database record, and returns the updated document.
+
+### 4.6 Setup Workspace & Readiness Orchestration (S1.5)
+- **Domain Module**: `server/core/institution/setup/setupReadinessService.js`
+- **Controller & Routes**: `server/controllers/setupController.js`, `server/routes/setupRoutes.js`
+- **Route**: `GET /api/setup/readiness`
+- **Persistence Boundary**: Derived read-only aggregation across `Institution`, `Department`, `Program`, `Term`, `Group`, `Calendar`, and `TimeModel`. No separate persistence collection is introduced.
+- **Frontend Workspace**: `client/src/features/setup/SetupWorkspace.jsx`
+- **ADR**: `docs/adr/0004-setup-readiness-service.md`
