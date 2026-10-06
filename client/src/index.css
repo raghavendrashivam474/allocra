@@ -223,3 +223,109 @@ body {
   color: #991b1b;
   border: 1px solid #fecaca;
 }
+
+/* Setup Workspace Styles */
+.setup-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.setup-header-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.readiness-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+.banner-ready {
+  background-color: #ecfdf5;
+  border: 1px solid #10b981;
+  color: #065f46;
+}
+.banner-incomplete {
+  background-color: #fffbeb;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+}
+.banner-status-icon {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+}
+.banner-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.banner-content p {
+  font-size: 14px;
+}
+.incomplete-list {
+  margin-top: 8px;
+  margin-left: 20px;
+  font-size: 13.5px;
+}
+.incomplete-list li {
+  margin-bottom: 4px;
+}
+.setup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.setup-item-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e5e7eb;
+}
+.setup-item-card.item-complete {
+  border-left: 4px solid #10b981;
+}
+.setup-item-card.item-incomplete {
+  border-left: 4px solid #f59e0b;
+}
+.item-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.item-header h3 {
+  font-size: 16px;
+  color: #111827;
+}
+.status-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-complete {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.badge-incomplete {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+.item-message {
+  font-size: 13.5px;
+  color: #4b5563;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.item-actions {
+  display: flex;
+  justify-content: flex-end;
+}

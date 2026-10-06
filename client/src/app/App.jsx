@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { checkHealth } from '../api/health';
+import SetupWorkspace from '../features/setup/SetupWorkspace';
 import InstitutionView from '../features/institution/InstitutionView';
 import AcademicStructureView from '../features/academic-structure/AcademicStructureView';
 import TermsAndGroupsView from '../features/academic-context/TermsAndGroupsView';
@@ -7,7 +8,7 @@ import CalendarView from '../features/calendar/CalendarView';
 import TimeModelView from '../features/time-model/TimeModelView';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('setup');
   const [serverStatus, setServerStatus] = useState('checking');
 
   useEffect(() => {
@@ -29,10 +30,10 @@ export default function App() {
       <div className="allocra-body">
         <aside className="allocra-sidebar">
           <button
-            className={`allocra-nav-item ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => setActiveTab('overview')}
+            className={`allocra-nav-item ${activeTab === 'setup' ? 'active' : ''}`}
+            onClick={() => setActiveTab('setup')}
           >
-            Overview
+            Setup Workspace
           </button>
           <button
             className={`allocra-nav-item ${activeTab === 'institution' ? 'active' : ''}`}
@@ -67,31 +68,21 @@ export default function App() {
         </aside>
 
         <main className="allocra-content">
-          {activeTab === 'overview' && (
-            <div className="card">
-              <h2>Welcome to Allocra</h2>
-              <p>Configurable, constraint-aware resource allocation and scheduling platform.</p>
-              <br />
-              <p>Select <strong>Institution</strong> from the sidebar to configure the college foundation.</p>
-            </div>
+          {activeTab === 'setup' && (
+            <SetupWorkspace onNavigate={(tab) => setActiveTab(tab)} />
           )}
-
           {activeTab === 'institution' && (
             <InstitutionView />
           )}
-
           {activeTab === 'academic-structure' && (
             <AcademicStructureView />
           )}
-
           {activeTab === 'terms-and-groups' && (
             <TermsAndGroupsView />
           )}
-
           {activeTab === 'calendar' && (
             <CalendarView />
           )}
-
           {activeTab === 'time-model' && (
             <TimeModelView />
           )}
