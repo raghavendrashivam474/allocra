@@ -6,6 +6,7 @@ import {
   fetchPrograms,
   createProgram
 } from '../../api/academicStructure';
+import { Card, Alert, Button, LoadingState } from '../../components/ui';
 
 export default function AcademicStructureView() {
   const [institution, setInstitution] = useState(null);
@@ -34,7 +35,6 @@ export default function AcademicStructureView() {
     try {
       const instRes = await fetchInstitution();
       setInstitution(instRes.institution);
-
       if (instRes.institution) {
         const [deptsRes, progsRes] = await Promise.all([
           fetchDepartments(),
@@ -56,7 +56,6 @@ export default function AcademicStructureView() {
       setError('Department name is required');
       return;
     }
-
     setSubmittingDept(true);
     setError(null);
     try {
@@ -81,7 +80,6 @@ export default function AcademicStructureView() {
       setError('Program name is required');
       return;
     }
-
     setSubmittingProg(true);
     setError(null);
     try {
@@ -102,29 +100,26 @@ export default function AcademicStructureView() {
 
   if (loading) {
     return (
-      <div className="card">
-        <h2>Academic Structure</h2>
-        <p>Loading academic structure details...</p>
-      </div>
+      <Card title="Academic Structure">
+        <LoadingState message="Loading academic structure details..." />
+      </Card>
     );
   }
 
   if (!institution) {
     return (
-      <div className="card">
-        <h2>Academic Structure</h2>
-        <div className="alert alert-error">
+      <Card title="Academic Structure">
+        <Alert type="error">
           {error || 'Please configure your Institution first before accessing Academic Structure.'}
-        </div>
-      </div>
+        </Alert>
+      </Card>
     );
   }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '650px' }}>
       {/* Institution Context Header */}
-      <div className="card" style={{ maxWidth: '100%' }}>
-        <h2>Active Institution</h2>
+      <Card title="Active Institution" style={{ maxWidth: '100%' }}>
         <div className="info-group">
           <span className="info-label">Name</span>
           <span className="info-value">{institution.name}</span>
@@ -133,22 +128,19 @@ export default function AcademicStructureView() {
           <span className="info-label">Academic Year</span>
           <span className="info-value">{institution.academicYear}</span>
         </div>
-      </div>
+      </Card>
 
       {/* Main Structure Workspace */}
-      <div className="card" style={{ maxWidth: '100%' }}>
-        <h2>Academic Structure Configuration</h2>
-
-        {error && <div className="alert alert-error">{error}</div>}
+      <Card title="Academic Structure Configuration" style={{ maxWidth: '100%' }}>
+        {error && <Alert type="error">{error}</Alert>}
 
         {/* Departments Panel */}
         <section style={{ marginBottom: '28px' }}>
-          <h3 style={{ fontSize: '15px', color: '#374151', marginBottom: '12px', borderBottom: '1px solid #e5e7eb', paddingBottom: '6px' }}>
+          <h3 style={{ fontSize: '15px', color: 'var(--color-text-primary, #0f172a)', marginBottom: '12px', borderBottom: '1px solid var(--color-border, #e2e8f0)', paddingBottom: '6px' }}>
             Departments
           </h3>
-
           {departments.length === 0 ? (
-            <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '12px' }}>
+            <p style={{ color: 'var(--color-text-muted, #64748b)', fontSize: '14px', marginBottom: '12px' }}>
               No departments configured yet.
             </p>
           ) : (
@@ -158,15 +150,10 @@ export default function AcademicStructureView() {
                 return (
                   <div
                     key={dept._id}
-                    style={{
-                      padding: '12px',
-                      backgroundColor: '#f9fafb',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '6px'
-                    }}
+                    className="sub-card"
                   >
-                    <div style={{ fontWeight: 600, fontSize: '14px', color: '#111827' }}>{dept.name}</div>
-                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>
+                    <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text-primary, #0f172a)' }}>{dept.name}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--color-text-muted, #64748b)', marginTop: '2px' }}>
                       {deptPrograms.length} {deptPrograms.length === 1 ? 'Program' : 'Programs'}
                     </div>
                   </div>
@@ -176,13 +163,13 @@ export default function AcademicStructureView() {
           )}
 
           {!showDeptForm && (
-            <button className="btn btn-secondary" onClick={() => { setShowDeptForm(true); setError(null); }}>
+            <Button variant="secondary" onClick={() => { setShowDeptForm(true); setError(null); }}>
               + Add Department
-            </button>
+            </Button>
           )}
 
           {showDeptForm && (
-            <form onSubmit={handleAddDepartment} style={{ backgroundColor: '#f3f4f6', padding: '16px', borderRadius: '6px', marginTop: '12px' }}>
+            <form onSubmit={handleAddDepartment} className="form-panel">
               <div className="form-group" style={{ marginBottom: '12px' }}>
                 <label htmlFor="deptName">Department Name</label>
                 <input
@@ -196,18 +183,18 @@ export default function AcademicStructureView() {
                 />
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <button type="submit" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '13px' }} disabled={submittingDept}>
+                <Button type="submit" variant="primary" size="sm" disabled={submittingDept}>
                   {submittingDept ? 'Creating...' : 'Create Department'}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
-                  className="btn btn-secondary"
-                  style={{ padding: '6px 12px', fontSize: '13px' }}
+                  variant="secondary"
+                  size="sm"
                   onClick={() => { setShowDeptForm(false); setDeptName(''); setError(null); }}
                   disabled={submittingDept}
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </form>
           )}
@@ -215,20 +202,19 @@ export default function AcademicStructureView() {
 
         {/* Programs Panel */}
         <section>
-          <h3 style={{ fontSize: '15px', color: '#374151', marginBottom: '12px', borderBottom: '1px solid #e5e7eb', paddingBottom: '6px' }}>
+          <h3 style={{ fontSize: '15px', color: 'var(--color-text-primary, #0f172a)', marginBottom: '12px', borderBottom: '1px solid var(--color-border, #e2e8f0)', paddingBottom: '6px' }}>
             Programs
           </h3>
-
           {programs.length === 0 ? (
-            <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '12px' }}>
+            <p style={{ color: 'var(--color-text-muted, #64748b)', fontSize: '14px', marginBottom: '12px' }}>
               No programs configured yet.
             </p>
           ) : (
             <ul style={{ paddingLeft: '20px', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {programs.map(prog => (
-                <li key={prog._id} style={{ fontSize: '14px', color: '#374151' }}>
-                  <strong>{prog.name}</strong>{' '}
-                  <span style={{ color: '#6b7280', fontSize: '13px' }}>
+                <li key={prog._id} style={{ fontSize: '14px', color: 'var(--color-text-secondary, #475569)' }}>
+                  <strong style={{ color: 'var(--color-text-primary, #0f172a)' }}>{prog.name}</strong>{' '}
+                  <span style={{ color: 'var(--color-text-muted, #64748b)', fontSize: '13px' }}>
                     ({prog.departmentId?.name || 'Department Name Loading'})
                   </span>
                 </li>
@@ -237,8 +223,8 @@ export default function AcademicStructureView() {
           )}
 
           {!showProgForm && (
-            <button
-              className="btn btn-secondary"
+            <Button
+              variant="secondary"
               onClick={() => {
                 setShowProgForm(true);
                 setError(null);
@@ -250,23 +236,15 @@ export default function AcademicStructureView() {
               title={departments.length === 0 ? "Create a department first" : ""}
             >
               + Add Program
-            </button>
+            </Button>
           )}
 
           {showProgForm && (
-            <form onSubmit={handleAddProgram} style={{ backgroundColor: '#f3f4f6', padding: '16px', borderRadius: '6px', marginTop: '12px' }}>
+            <form onSubmit={handleAddProgram} className="form-panel">
               <div className="form-group" style={{ marginBottom: '12px' }}>
                 <label htmlFor="progDept">Department</label>
                 <select
                   id="progDept"
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    border: '1px solid #d1d5db',
-                    borderRadius: '6px',
-                    fontSize: '14px',
-                    backgroundColor: 'white'
-                  }}
                   value={selectedDeptId}
                   onChange={(e) => setSelectedDeptId(e.target.value)}
                   disabled={submittingProg}
@@ -276,7 +254,6 @@ export default function AcademicStructureView() {
                   ))}
                 </select>
               </div>
-
               <div className="form-group" style={{ marginBottom: '12px' }}>
                 <label htmlFor="progName">Program Name</label>
                 <input
@@ -288,25 +265,24 @@ export default function AcademicStructureView() {
                   disabled={submittingProg}
                 />
               </div>
-
               <div style={{ display: 'flex', gap: '8px' }}>
-                <button type="submit" className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '13px' }} disabled={submittingProg}>
+                <Button type="submit" variant="primary" size="sm" disabled={submittingProg}>
                   {submittingProg ? 'Creating...' : 'Create Program'}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
-                  className="btn btn-secondary"
-                  style={{ padding: '6px 12px', fontSize: '13px' }}
+                  variant="secondary"
+                  size="sm"
                   onClick={() => { setShowProgForm(false); setProgName(''); setError(null); }}
                   disabled={submittingProg}
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </form>
           )}
         </section>
-      </div>
+      </Card>
     </div>
   );
 }

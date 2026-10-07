@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { fetchInstitution, saveInstitution } from '../../api/institution';
+import { Card, Alert, Button, LoadingState } from '../../components/ui';
 
 export default function InstitutionView() {
   const [institution, setInstitution] = useState(null);
@@ -39,7 +40,6 @@ export default function InstitutionView() {
       setError('Please provide both Institution Name and Academic Year');
       return;
     }
-
     setSubmitting(true);
     setError(null);
     try {
@@ -62,18 +62,15 @@ export default function InstitutionView() {
 
   if (loading) {
     return (
-      <div className="card">
-        <h2>Institution Configuration</h2>
-        <p className="loading-text">Loading institution details...</p>
-      </div>
+      <Card title="Institution Configuration">
+        <LoadingState message="Loading institution details..." className="loading-text" />
+      </Card>
     );
   }
 
   return (
-    <div className="card">
-      <h2>Institution Configuration</h2>
-
-      {error && <div className="alert alert-error">{error}</div>}
+    <Card title="Institution Configuration">
+      {error && <Alert type="error">{error}</Alert>}
 
       {!isEditing && institution && (
         <div className="institution-details">
@@ -81,20 +78,17 @@ export default function InstitutionView() {
             <span className="info-label">Institution Name</span>
             <span className="info-value">{institution.name}</span>
           </div>
-
           <div className="info-group">
             <span className="info-label">Academic Year</span>
             <span className="info-value">{institution.academicYear}</span>
           </div>
-
           <div className="badge-success">
             &#x2713; Institution configured
           </div>
-
           <div style={{ marginTop: '20px' }}>
-            <button className="btn btn-secondary" onClick={() => setIsEditing(true)}>
+            <Button variant="secondary" onClick={() => setIsEditing(true)}>
               Edit Configuration
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -102,9 +96,9 @@ export default function InstitutionView() {
       {!isEditing && !institution && (
         <div className="empty-state">
           <p>No institution configured yet.</p>
-          <button className="btn btn-primary" onClick={handleStartCreate} style={{ marginTop: '16px' }}>
+          <Button variant="primary" onClick={handleStartCreate} style={{ marginTop: '16px' }}>
             Create Institution
-          </button>
+          </Button>
         </div>
       )}
 
@@ -122,7 +116,6 @@ export default function InstitutionView() {
               autoFocus
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="academicYear">Academic Year</label>
             <input
@@ -134,14 +127,13 @@ export default function InstitutionView() {
               disabled={submitting}
             />
           </div>
-
           <div className="form-actions">
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
+            <Button type="submit" variant="primary" disabled={submitting}>
               {submitting ? 'Saving...' : 'Save Institution'}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className="btn btn-secondary"
+              variant="secondary"
               onClick={() => {
                 setIsEditing(false);
                 setError(null);
@@ -153,10 +145,10 @@ export default function InstitutionView() {
               disabled={submitting}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </form>
       )}
-    </div>
+    </Card>
   );
 }

@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { fetchInstitution } from '../../api/institution';
 import { fetchTimeModel, saveTimeModel } from '../../api/timeModel';
+import { Card, Alert, Button, LoadingState } from '../../components/ui';
 
 export default function TimeModelView() {
   const [institution, setInstitution] = useState(null);
@@ -21,7 +22,6 @@ export default function TimeModelView() {
     try {
       const instRes = await fetchInstitution();
       setInstitution(instRes.institution);
-
       if (instRes.institution) {
         const tmRes = await fetchTimeModel();
         if (tmRes.timeModel) {
@@ -96,7 +96,6 @@ export default function TimeModelView() {
     }
 
     const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-
     for (const p of periods) {
       if (!p.name.trim()) return 'All periods must have a name';
       if (!timeRegex.test(p.startTime)) return `Invalid start time "${p.startTime}" on ${p.name}. Use HH:mm`;
@@ -150,29 +149,26 @@ export default function TimeModelView() {
 
   if (loading) {
     return (
-      <div className="card">
-        <h2>Time Model Configuration</h2>
-        <p>Loading time model details...</p>
-      </div>
+      <Card title="Time Model Configuration">
+        <LoadingState message="Loading time model details..." />
+      </Card>
     );
   }
 
   if (!institution) {
     return (
-      <div className="card">
-        <h2>Time Model Configuration</h2>
-        <div className="alert alert-error">
+      <Card title="Time Model Configuration">
+        <Alert type="error">
           {error || 'Please configure your Institution first before accessing Time Model Configuration.'}
-        </div>
-      </div>
+        </Alert>
+      </Card>
     );
   }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '800px' }}>
       {/* Active Institution Context Header */}
-      <div className="card" style={{ maxWidth: '100%' }}>
-        <h2>Active Institution</h2>
+      <Card title="Active Institution" style={{ maxWidth: '100%' }}>
         <div className="info-group">
           <span className="info-label">Name</span>
           <span className="info-value">{institution.name}</span>
@@ -181,64 +177,42 @@ export default function TimeModelView() {
           <span className="info-label">Academic Year</span>
           <span className="info-value">{institution.academicYear}</span>
         </div>
-      </div>
+      </Card>
 
       {/* Time Model Form */}
-      <div className="card" style={{ maxWidth: '100%' }}>
-        <h2>Time Model</h2>
-        <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '18px' }}>
-          Define the daily schedule structure (periods and breaks). Times must be in 24-hour HH:mm format.
-        </p>
-
-        {error && <div className="alert alert-error">{error}</div>}
-        {successMessage && (
-          <div
-            className="alert alert-success"
-            style={{
-              backgroundColor: '#ecfdf5',
-              color: '#047857',
-              border: '1px solid #10b981',
-              padding: '12px',
-              borderRadius: '6px',
-              marginBottom: '16px',
-              fontSize: '14px'
-            }}
-          >
-            {successMessage}
-          </div>
-        )}
+      <Card title="Time Model" description="Define the daily schedule structure (periods and breaks). Times must be in 24-hour HH:mm format." style={{ maxWidth: '100%' }}>
+        {error && <Alert type="error">{error}</Alert>}
+        {successMessage && <Alert type="success">{successMessage}</Alert>}
 
         <form onSubmit={handleSave}>
           {/* Periods Section */}
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>Periods</h3>
-              <button
+              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--color-text-primary, #0f172a)' }}>Periods</h3>
+              <Button
                 type="button"
-                className="btn"
+                variant="secondary"
+                size="sm"
                 onClick={addPeriod}
                 disabled={submitting}
-                style={{ padding: '6px 12px', fontSize: '13px' }}
               >
                 + Add Period
-              </button>
+              </Button>
             </div>
 
             {periods.length === 0 ? (
-              <p style={{ color: '#9ca3af', fontSize: '14px', fontStyle: 'italic' }}>No periods configured.</p>
+              <p style={{ color: 'var(--color-text-muted, #64748b)', fontSize: '14px', fontStyle: 'italic' }}>No periods configured.</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {periods.map((period, idx) => (
                   <div
                     key={idx}
+                    className="sub-card"
                     style={{
                       display: 'flex',
                       gap: '10px',
                       alignItems: 'center',
-                      background: '#f9fafb',
-                      padding: '10px',
-                      borderRadius: '6px',
-                      border: '1px solid #e5e7eb'
+                      padding: '10px'
                     }}
                   >
                     <input
@@ -248,7 +222,7 @@ export default function TimeModelView() {
                       value={period.name}
                       onChange={e => handlePeriodChange(idx, 'name', e.target.value)}
                       disabled={submitting}
-                      style={{ flex: '2', padding: '8px', border: '1px solid #d1d5db', borderRadius: '4px' }}
+                      style={{ flex: '2', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: 'var(--radius-sm, 6px)' }}
                     />
                     <input
                       type="text"
@@ -257,9 +231,9 @@ export default function TimeModelView() {
                       value={period.startTime}
                       onChange={e => handlePeriodChange(idx, 'startTime', e.target.value)}
                       disabled={submitting}
-                      style={{ flex: '1', padding: '8px', border: '1px solid #d1d5db', borderRadius: '4px', maxWidth: '100px' }}
+                      style={{ flex: '1', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: 'var(--radius-sm, 6px)', maxWidth: '100px' }}
                     />
-                    <span>—</span>
+                    <span style={{ color: 'var(--color-text-muted, #64748b)' }}>—</span>
                     <input
                       type="text"
                       placeholder="09:50"
@@ -267,22 +241,15 @@ export default function TimeModelView() {
                       value={period.endTime}
                       onChange={e => handlePeriodChange(idx, 'endTime', e.target.value)}
                       disabled={submitting}
-                      style={{ flex: '1', padding: '8px', border: '1px solid #d1d5db', borderRadius: '4px', maxWidth: '100px' }}
+                      style={{ flex: '1', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: 'var(--radius-sm, 6px)', maxWidth: '100px' }}
                     />
                     <button
                       type="button"
                       onClick={() => removePeriod(idx)}
                       disabled={submitting}
                       aria-label={`Remove Period ${idx + 1}`}
-                      style={{
-                        padding: '6px 10px',
-                        background: '#fee2e2',
-                        color: '#991b1b',
-                        border: '1px solid #fca5a5',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '13px'
-                      }}
+                      className="btn btn-danger btn-sm"
+                      style={{ padding: '6px 10px' }}
                     >
                       ✕
                     </button>
@@ -295,33 +262,31 @@ export default function TimeModelView() {
           {/* Breaks Section */}
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>Breaks</h3>
-              <button
+              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: 'var(--color-text-primary, #0f172a)' }}>Breaks</h3>
+              <Button
                 type="button"
-                className="btn"
+                variant="secondary"
+                size="sm"
                 onClick={addBreak}
                 disabled={submitting}
-                style={{ padding: '6px 12px', fontSize: '13px' }}
               >
                 + Add Break
-              </button>
+              </Button>
             </div>
 
             {breaks.length === 0 ? (
-              <p style={{ color: '#9ca3af', fontSize: '14px', fontStyle: 'italic' }}>No breaks configured.</p>
+              <p style={{ color: 'var(--color-text-muted, #64748b)', fontSize: '14px', fontStyle: 'italic' }}>No breaks configured.</p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {breaks.map((brk, idx) => (
                   <div
                     key={idx}
+                    className="sub-card"
                     style={{
                       display: 'flex',
                       gap: '10px',
                       alignItems: 'center',
-                      background: '#f9fafb',
-                      padding: '10px',
-                      borderRadius: '6px',
-                      border: '1px solid #e5e7eb'
+                      padding: '10px'
                     }}
                   >
                     <input
@@ -331,7 +296,7 @@ export default function TimeModelView() {
                       value={brk.name}
                       onChange={e => handleBreakChange(idx, 'name', e.target.value)}
                       disabled={submitting}
-                      style={{ flex: '2', padding: '8px', border: '1px solid #d1d5db', borderRadius: '4px' }}
+                      style={{ flex: '2', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: 'var(--radius-sm, 6px)' }}
                     />
                     <input
                       type="text"
@@ -340,9 +305,9 @@ export default function TimeModelView() {
                       value={brk.startTime}
                       onChange={e => handleBreakChange(idx, 'startTime', e.target.value)}
                       disabled={submitting}
-                      style={{ flex: '1', padding: '8px', border: '1px solid #d1d5db', borderRadius: '4px', maxWidth: '100px' }}
+                      style={{ flex: '1', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: 'var(--radius-sm, 6px)', maxWidth: '100px' }}
                     />
-                    <span>—</span>
+                    <span style={{ color: 'var(--color-text-muted, #64748b)' }}>—</span>
                     <input
                       type="text"
                       placeholder="11:00"
@@ -350,22 +315,15 @@ export default function TimeModelView() {
                       value={brk.endTime}
                       onChange={e => handleBreakChange(idx, 'endTime', e.target.value)}
                       disabled={submitting}
-                      style={{ flex: '1', padding: '8px', border: '1px solid #d1d5db', borderRadius: '4px', maxWidth: '100px' }}
+                      style={{ flex: '1', padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: 'var(--radius-sm, 6px)', maxWidth: '100px' }}
                     />
                     <button
                       type="button"
                       onClick={() => removeBreak(idx)}
                       disabled={submitting}
                       aria-label={`Remove Break ${idx + 1}`}
-                      style={{
-                        padding: '6px 10px',
-                        background: '#fee2e2',
-                        color: '#991b1b',
-                        border: '1px solid #fca5a5',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '13px'
-                      }}
+                      className="btn btn-danger btn-sm"
+                      style={{ padding: '6px 10px' }}
                     >
                       ✕
                     </button>
@@ -375,16 +333,16 @@ export default function TimeModelView() {
             )}
           </div>
 
-          <button
+          <Button
             type="submit"
-            className="btn btn-primary"
+            variant="primary"
             disabled={submitting}
             style={{ minWidth: '140px' }}
           >
             {submitting ? 'Saving...' : 'Save Time Model'}
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }

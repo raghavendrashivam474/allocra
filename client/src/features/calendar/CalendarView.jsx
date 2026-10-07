@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { fetchInstitution } from '../../api/institution';
 import { fetchCalendar, saveCalendar } from '../../api/calendar';
+import { Card, Alert, Button, LoadingState } from '../../components/ui';
 
 const DAYS_OF_WEEK = [
   { value: 'MONDAY', label: 'Monday' },
@@ -30,7 +31,6 @@ export default function CalendarView() {
     try {
       const instRes = await fetchInstitution();
       setInstitution(instRes.institution);
-
       if (instRes.institution) {
         const calRes = await fetchCalendar();
         if (calRes.calendar && calRes.calendar.workingDays) {
@@ -55,19 +55,17 @@ export default function CalendarView() {
         return [...prev, day];
       }
     });
-    setSuccessMessage(null); // Clear success when user makes changes
+    setSuccessMessage(null);
   }
 
   async function handleSave(e) {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
-
     if (selectedDays.length === 0) {
       setError('Please select at least one working day');
       return;
     }
-
     setSubmitting(true);
     try {
       await saveCalendar({ workingDays: selectedDays });
@@ -81,29 +79,26 @@ export default function CalendarView() {
 
   if (loading) {
     return (
-      <div className="card">
-        <h2>Calendar Configuration</h2>
-        <p>Loading calendar details...</p>
-      </div>
+      <Card title="Calendar Configuration">
+        <LoadingState message="Loading calendar details..." />
+      </Card>
     );
   }
 
   if (!institution) {
     return (
-      <div className="card">
-        <h2>Calendar Configuration</h2>
-        <div className="alert alert-error">
+      <Card title="Calendar Configuration">
+        <Alert type="error">
           {error || 'Please configure your Institution first before accessing Calendar Configuration.'}
-        </div>
-      </div>
+        </Alert>
+      </Card>
     );
   }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '650px' }}>
       {/* Active Institution Context Header */}
-      <div className="card" style={{ maxWidth: '100%' }}>
-        <h2>Active Institution</h2>
+      <Card title="Active Institution" style={{ maxWidth: '100%' }}>
         <div className="info-group">
           <span className="info-label">Name</span>
           <span className="info-value">{institution.name}</span>
@@ -112,20 +107,15 @@ export default function CalendarView() {
           <span className="info-label">Academic Year</span>
           <span className="info-value">{institution.academicYear}</span>
         </div>
-      </div>
+      </Card>
 
       {/* Working Days Configurator card */}
-      <div className="card" style={{ maxWidth: '100%' }}>
-        <h2>Working Days</h2>
-        <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '18px' }}>
-          Define which days of the week are normally available for academic scheduling.
-        </p>
-
-        {error && <div className="alert alert-error">{error}</div>}
-        {successMessage && <div className="alert alert-success" style={{ backgroundColor: '#ecfdf5', color: '#047857', border: '1px solid #10b981', padding: '12px', borderRadius: '6px', marginBottom: '16px', fontSize: '14px' }}>{successMessage}</div>}
+      <Card title="Working Days" description="Define which days of the week are normally available for academic scheduling." style={{ maxWidth: '100%' }}>
+        {error && <Alert type="error">{error}</Alert>}
+        {successMessage && <Alert type="success">{successMessage}</Alert>}
 
         <form onSubmit={handleSave}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px' }}>
             {DAYS_OF_WEEK.map(day => {
               const isChecked = selectedDays.includes(day.value);
               return (
@@ -134,16 +124,16 @@ export default function CalendarView() {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '10px',
-                    padding: '12px',
-                    backgroundColor: isChecked ? '#f3f4f6' : 'transparent',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '6px',
+                    gap: '12px',
+                    padding: '12px 16px',
+                    backgroundColor: isChecked ? 'var(--color-primary-light, #eef2ff)' : 'transparent',
+                    border: `1px solid ${isChecked ? 'var(--color-primary-border, #c7d2fe)' : 'var(--color-border, #e2e8f0)'}`,
+                    borderRadius: 'var(--radius-md, 8px)',
                     cursor: 'pointer',
                     fontSize: '14px',
                     fontWeight: isChecked ? 600 : 400,
-                    color: isChecked ? '#111827' : '#374151',
-                    transition: 'background-color 0.15s ease'
+                    color: isChecked ? 'var(--color-primary, #4338ca)' : 'var(--color-text-primary, #0f172a)',
+                    transition: 'all var(--transition-fast, 150ms ease-in-out)'
                   }}
                 >
                   <input
@@ -151,24 +141,23 @@ export default function CalendarView() {
                     checked={isChecked}
                     onChange={() => handleCheckboxChange(day.value)}
                     disabled={submitting}
-                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                    style={{ width: '16px', height: '16px', cursor: 'pointer', accentColor: 'var(--color-primary, #4338ca)' }}
                   />
                   {day.label}
                 </label>
               );
             })}
           </div>
-
-          <button
+          <Button
             type="submit"
-            className="btn btn-primary"
+            variant="primary"
             disabled={submitting}
-            style={{ minWidth: '120px' }}
+            style={{ minWidth: '130px' }}
           >
             {submitting ? 'Saving...' : 'Save Calendar'}
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }
