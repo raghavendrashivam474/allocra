@@ -8,6 +8,8 @@ import groupRoutes from './routes/groupRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
 import timeModelRoutes from './routes/timeModelRoutes.js';
 import setupRoutes from './routes/setupRoutes.js';
+import facultyRoutes from './routes/facultyRoutes.js';
+import roomRoutes from './routes/roomRoutes.js';
 
 const app = express();
 
@@ -30,6 +32,12 @@ app.use('/api/institution', institutionRoutes);
 app.use('/api/departments', departmentRoutes);
 app.use('/api/programs', programRoutes);
 
+// S2.1: Faculty API
+app.use('/api/faculty', facultyRoutes);
+
+// S2.2: Rooms API
+app.use('/api/rooms', roomRoutes);
+
 // S1.2: Academic Terms & Groups API
 app.use('/api/terms', termRoutes);
 app.use('/api/groups', groupRoutes);
@@ -49,5 +57,9 @@ app.use((err, req, res, next) => {
 });
 
 export default app;
+
+
+
+
 
 
