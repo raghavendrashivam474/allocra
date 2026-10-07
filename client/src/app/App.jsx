@@ -20,46 +20,58 @@ export default function App() {
   return (
     <div className="allocra-container">
       <header className="allocra-header">
-        <h1>ALLOCRA</h1>
+        <div className="brand-wrap">
+          <h1>ALLOCRA</h1>
+          <span className="brand-badge">Academic Engine</span>
+        </div>
         <div className="system-status">
-          <span className={`status-dot status-${serverStatus}`}></span>
+          <span className={`status-dot status-${serverStatus}`} aria-hidden="true"></span>
           <span>Backend: {serverStatus}</span>
         </div>
       </header>
 
       <div className="allocra-body">
-        <aside className="allocra-sidebar">
+        <aside className="allocra-sidebar" aria-label="Main Navigation">
+          <div className="nav-section-label">Workspace</div>
           <button
+            type="button"
             className={`allocra-nav-item ${activeTab === 'setup' ? 'active' : ''}`}
             onClick={() => setActiveTab('setup')}
           >
             Setup Workspace
           </button>
+
+          <div className="nav-section-label">Institution</div>
           <button
+            type="button"
             className={`allocra-nav-item ${activeTab === 'institution' ? 'active' : ''}`}
             onClick={() => setActiveTab('institution')}
           >
             Institution
           </button>
           <button
+            type="button"
             className={`allocra-nav-item ${activeTab === 'academic-structure' ? 'active' : ''}`}
             onClick={() => setActiveTab('academic-structure')}
           >
             Academic Structure
           </button>
           <button
+            type="button"
             className={`allocra-nav-item ${activeTab === 'terms-and-groups' ? 'active' : ''}`}
             onClick={() => setActiveTab('terms-and-groups')}
           >
             Terms & Groups
           </button>
           <button
+            type="button"
             className={`allocra-nav-item ${activeTab === 'calendar' ? 'active' : ''}`}
             onClick={() => setActiveTab('calendar')}
           >
             Calendar
           </button>
           <button
+            type="button"
             className={`allocra-nav-item ${activeTab === 'time-model' ? 'active' : ''}`}
             onClick={() => setActiveTab('time-model')}
           >
@@ -67,7 +79,7 @@ export default function App() {
           </button>
         </aside>
 
-        <main className="allocra-content">
+        <main className="allocra-content" id="main-content">
           {activeTab === 'setup' && (
             <SetupWorkspace onNavigate={(tab) => setActiveTab(tab)} />
           )}
