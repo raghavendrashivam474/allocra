@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { fetchReadiness } from '../../api/setup';
+import { Card, Alert, Button, LoadingState } from '../../components/ui';
 
 export default function SetupWorkspace({ onNavigate }) {
   const [readiness, setReadiness] = useState(null);
@@ -33,40 +34,48 @@ export default function SetupWorkspace({ onNavigate }) {
 
   if (loading) {
     return (
-      <div className="card">
-        <p>Loading setup workspace...</p>
-      </div>
+      <Card>
+        <LoadingState message="Loading setup workspace..." />
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div className="card">
-        <h2>Setup Workspace</h2>
-        <div className="alert alert-error" style={{ margin: '16px 0' }}>
+      <Card title="Setup Workspace">
+        <Alert type="error" style={{ margin: '16px 0' }}>
           {error}
-        </div>
-        <button className="btn btn-primary" onClick={loadReadiness}>
+        </Alert>
+        <Button variant="primary" onClick={loadReadiness}>
           Retry
-        </button>
-      </div>
+        </Button>
+      </Card>
     );
   }
 
   const checks = readiness?.checks || [];
   const isReady = readiness?.ready === true;
+  const completedCount = checks.filter(c => c.status === 'complete').length;
+  const totalCount = checks.length;
   const incompleteChecks = checks.filter(c => c.status !== 'complete');
 
   return (
     <div className="setup-workspace">
       <div className="card setup-header-card">
-        <h2>Setup Workspace & Configuration Readiness</h2>
-        <p>
-          Overview of Phase 1 foundational setup. Ensure all sections are configured before proceeding to Phase 2.
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
+          <div>
+            <h2>Setup Workspace & Configuration Readiness</h2>
+            <p>
+              Overview of Phase 1 foundational setup. Ensure all sections are configured before proceeding to Phase 2.
+            </p>
+          </div>
+          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text-muted)', backgroundColor: 'var(--color-surface-subtle)', padding: '4px 10px', borderRadius: 'var(--radius-full)', border: '1px solid var(--color-border)' }}>
+            {completedCount} / {totalCount} Configured
+          </span>
+        </div>
 
         <div className={`readiness-banner ${isReady ? 'banner-ready' : 'banner-incomplete'}`}>
-          <div className="banner-status-icon">
+          <div className="banner-status-icon" aria-hidden="true">
             {isReady ? '✓' : '⚠'}
           </div>
           <div className="banner-content">
@@ -104,12 +113,12 @@ export default function SetupWorkspace({ onNavigate }) {
               </div>
               <p className="item-message">{check.message}</p>
               <div className="item-actions">
-                <button
-                  className={`btn ${isComplete ? 'btn-secondary' : 'btn-primary'}`}
+                <Button
+                  variant={isComplete ? 'secondary' : 'primary'}
                   onClick={() => onNavigate && targetTab && onNavigate(targetTab)}
                 >
                   {isComplete ? 'Manage' : 'Configure'}
-                </button>
+                </Button>
               </div>
             </div>
           );
