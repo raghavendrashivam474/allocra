@@ -1,4 +1,4 @@
-﻿# Allocra
+# Allocra
 
 > Academic Timetable & Resource Allocation Engine
 
@@ -6,12 +6,12 @@ Allocra is an academic scheduling and allocation platform designed to automate a
 
 ---
 
-## Current Status: S1.6 Complete — Professional UI/UX Foundation (v1.6)
+## Current Status: S2.1 & S2.2 Complete — Faculty & Room Resources Foundation (v2.2)
 
 - **Backend:** Node.js (ESM), Express, MongoDB / Mongoose
 - **Frontend:** React 18, Vite
 - **Testing:** Vitest, Supertest, MongoDB Memory Server, React Testing Library, jsdom
-- **Current Slice:** Health Check, Institution Configuration, Academic Structure, Terms & Groups, Calendar, Time Model, Setup Workspace, and a Professional UI/UX Foundation with 125 passing automated regression tests.
+- **Current Slice:** Health Check, Institution Configuration, Academic Structure, Terms & Groups, Calendar, Time Model, Setup Workspace, Faculty Foundation, Rooms & Physical Resources, and UI/UX Foundation with 154 passing automated regression tests.
 
 ---
 
@@ -50,7 +50,7 @@ MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.mongodb.net/allocra?retryWr
 
 ### 3. Run Automated Tests
 
-Execute the full regression test suite (125 tests across backend & frontend):
+Execute the full regression test suite (154 tests across backend & frontend):
 
 ```Bash
 npm test

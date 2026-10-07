@@ -30,6 +30,9 @@ React UI -> Express API -> Domain Modules -> Data / Persistence -> MongoDB
 - **Term**: `name`, `academicYear`, `institutionId`
 - **Group**: `name`, `programId`, `termId`, `institutionId`
 - **Calendar**: `institutionId`, `workingDays`
+- **TimeModel**: `institutionId`, `periods`, `breaks`
+- **Faculty**: `name`, `departmentId`, `institutionId`
+- **Room**: `name`, `type`, `capacity`, `institutionId`
 
 ## Rules
 - Domain logic must not depend directly on React, HTTP details, or MongoDB specifics.
@@ -75,8 +78,8 @@ A single **TimeModel** collection is maintained:
 4. **Boundary Touching Allowed:** Touching boundaries (\curr.startTime === prev.endTime\) are completely valid, allowing contiguous periods or direct hand-offs.
 
 ### API Specifications
-- **GET** \/api/time-model\ — Fetches the active time model configuration envelope (\{ timeModel: null | Document }\).
-- **PUT** \/api/time-model\ — Accepts body \{ periods: [...], breaks: [...] }\. Sanitizes, validates, sorts intervals, atomically updates or inserts (upsert) the database record, and returns the updated document.
+- **GET** \/api/time-model\ â€” Fetches the active time model configuration envelope (\{ timeModel: null | Document }\).
+- **PUT** \/api/time-model\ â€” Accepts body \{ periods: [...], breaks: [...] }\. Sanitizes, validates, sorts intervals, atomically updates or inserts (upsert) the database record, and returns the updated document.
 
 ### 4.6 Setup Workspace & Readiness Orchestration (S1.5)
 - **Domain Module**: `server/core/institution/setup/setupReadinessService.js`
@@ -110,3 +113,20 @@ A centralized CSS Custom Properties foundation provides consistent design tokens
 - **UI Primitives:** Pure presentational components with zero domain-specific coupling.
 - **Feature Views:** Maintain state, form logic, and API calls while delegating visual structure to the UI primitives.
 - **Setup Workspace:** Acts as the primary entry point, orchestrating readiness visualization and view navigation.
+
+## Phase 2: Resources & Activities
+
+### S2.1 Faculty Foundation
+- **Domain Concept:** Represents a human resource (instructor/educator) associated with a specific department inside the active institution.
+- **Boundaries:** Scoped to `institutionId` and validated against `departmentId`.
+- **API Endpoints:**
+  - `GET /api/faculty` â€” Lists faculty members for the active institution with populated department details.
+  - `POST /api/faculty` â€” Creates a faculty member under a validated department.
+
+### S2.2 Rooms & Physical Resources
+- **Domain Concept:** Represents physical spaces (Classroom, Laboratory, Seminar Room, Auditorium, Other) available within the institution for scheduled activities.
+- **Boundaries:** Scoped to `institutionId`. Requires positive integer capacity. Unique room name per institution.
+- **API Endpoints:**
+  - `GET /api/rooms` â€” Lists all rooms and returns supported room types.
+  - `POST /api/rooms` â€” Creates a room with validated type and capacity.
+
