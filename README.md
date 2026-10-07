@@ -6,12 +6,12 @@ Allocra is an academic scheduling and allocation platform designed to automate a
 
 ---
 
-## Current Status: Phase 1 Complete — S1.5 (V1.5)
+## Current Status: S1.6 Complete — Professional UI/UX Foundation (v1.6)
 
 - **Backend:** Node.js (ESM), Express, MongoDB / Mongoose
 - **Frontend:** React 18, Vite
 - **Testing:** Vitest, Supertest, MongoDB Memory Server, React Testing Library, jsdom
-- **Current Slice:** Health Check, Institution Configuration, Academic Structure (Departments & Programs), Academic Context (Terms & Groups/Batches), Calendar Configuration (Working Days), automated regression test suite (80 tests).
+- **Current Slice:** Health Check, Institution Configuration, Academic Structure, Terms & Groups, Calendar, Time Model, Setup Workspace, and a Professional UI/UX Foundation with 125 passing automated regression tests.
 
 ---
 
@@ -50,7 +50,7 @@ MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.mongodb.net/allocra?retryWr
 
 ### 3. Run Automated Tests
 
-Execute the full regression test suite (80 tests across backend & frontend):
+Execute the full regression test suite (125 tests across backend & frontend):
 
 ```Bash
 npm test
@@ -87,7 +87,9 @@ Open http://localhost:5173 in your browser.
 allocra/
 ├── client/                     # Frontend (React + Vite)
 │   ├── src/
-│   │   ├── api/                # API client modules (health, institution, academicStructure, academicContext, calendar, timeModel)
+│   │   ├── api/                # API client
+│   │   ├── components/
+│   │   │   └── ui/             # Reusable UI primitives (Button, Card, Alert, PageHeader, EmptyState, LoadingState) modules (health, institution, academicStructure, academicContext, calendar, timeModel)
 │   │   ├── app/                # Root App component & navigation
 │   │   ├── features/           # Feature modules (institution, academic-structure, academic-context, calendar, time-model)
 │   │   └── test/               # Frontend test setup
@@ -134,6 +136,8 @@ allocra/
   - `client/src/features/academic-structure/AcademicStructureView.test.jsx`
   - `client/src/features/academic-context/TermsAndGroupsView.test.jsx`
   - `client/src/features/calendar/CalendarView.test.jsx`
+  - `client/src/components/ui/ui.test.jsx` (UI Primitives & Interactions)
+
 
 
 

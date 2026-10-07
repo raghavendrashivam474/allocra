@@ -85,3 +85,28 @@ A single **TimeModel** collection is maintained:
 - **Persistence Boundary**: Derived read-only aggregation across `Institution`, `Department`, `Program`, `Term`, `Group`, `Calendar`, and `TimeModel`. No separate persistence collection is introduced.
 - **Frontend Workspace**: `client/src/features/setup/SetupWorkspace.jsx`
 - **ADR**: `docs/adr/0004-setup-readiness-service.md`
+
+## 4.7 Professional UI/UX Foundation (S1.6)
+
+### Purpose & Scope
+Sprint S1.6 establishes a clean, reusable visual foundation and interaction language across Allocra without altering underlying domain services, database schemas, or API contracts.
+
+### Design Token Architecture (`client/src/index.css`)
+A centralized CSS Custom Properties foundation provides consistent design tokens:
+- **Color System:** Semantic surface, border, text, and status variables (`--color-primary`, `--color-success-bg`, `--color-warning`, `--color-danger`, etc.).
+- **Typography & Scale:** Standardized font hierarchies, contrast guidelines, and focus rings (`--focus-ring`).
+- **Spacing & Radii:** Uniform spacing scales (`--space-xs` through `--space-2xl`) and corner curves (`--radius-sm`, `--radius-md`, `--radius-lg`).
+- **Responsive Layout:** Adaptive sidebar and content stacking patterns for tablet and narrow viewports.
+
+### Reusable UI Primitives (`client/src/components/ui/`)
+- `Button`: Standard primary, secondary, and danger actions with consistent states (hover, active, disabled).
+- `Card`: Uniform elevation, padding, titles, and borders across all views.
+- `Alert`: Semantic status banners (`error`, `success`, `warning`, `info`) with accessibility role attributes.
+- `PageHeader`: Consistent page titles, subtitles, and header-level actions.
+- `EmptyState`: Standard guidance for empty collections with direct call-to-action handlers.
+- `LoadingState`: Predictable loading indicators.
+
+### Component Boundaries
+- **UI Primitives:** Pure presentational components with zero domain-specific coupling.
+- **Feature Views:** Maintain state, form logic, and API calls while delegating visual structure to the UI primitives.
+- **Setup Workspace:** Acts as the primary entry point, orchestrating readiness visualization and view navigation.
