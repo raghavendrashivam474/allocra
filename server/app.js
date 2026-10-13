@@ -10,6 +10,7 @@ import timeModelRoutes from './routes/timeModelRoutes.js';
 import setupRoutes from './routes/setupRoutes.js';
 import facultyRoutes from './routes/facultyRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
+import activityRoutes from './routes/activityRoutes.js';
 
 const app = express();
 
@@ -42,6 +43,9 @@ app.use('/api/rooms', roomRoutes);
 app.use('/api/terms', termRoutes);
 app.use('/api/groups', groupRoutes);
 
+// S2.3: Activities API
+app.use('/api/activities', activityRoutes);
+
 // S1.3: Calendar Configuration API
 app.use('/api/calendar', calendarRoutes);
 
@@ -57,6 +61,7 @@ app.use((err, req, res, next) => {
 });
 
 export default app;
+
 
 
 
