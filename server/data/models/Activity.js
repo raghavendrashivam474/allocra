@@ -16,6 +16,14 @@ const ActivitySchema = new mongoose.Schema({
     required: [true, 'Activity name is required'],
     trim: true
   },
+  facultyIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Faculty'
+  }],
+  roomIds: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Room'
+  }],
   createdAt: {
     type: Date,
     default: Date.now
