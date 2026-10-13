@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { checkHealth } from '../api/health';
 import SetupWorkspace from '../features/setup/SetupWorkspace';
 import InstitutionView from '../features/institution/InstitutionView';
@@ -8,6 +8,7 @@ import CalendarView from '../features/calendar/CalendarView';
 import TimeModelView from '../features/time-model/TimeModelView';
 import FacultyView from '../features/faculty/FacultyView';
 import RoomsView from '../features/rooms/RoomsView';
+import ActivitiesView from '../features/activities/ActivitiesView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('setup');
@@ -67,6 +68,13 @@ export default function App() {
           </button>
           <button
             type="button"
+            className={`allocra-nav-item ${activeTab === 'activities' ? 'active' : ''}`}
+            onClick={() => setActiveTab('activities')}
+          >
+            Activities
+          </button>
+          <button
+            type="button"
             className={`allocra-nav-item ${activeTab === 'calendar' ? 'active' : ''}`}
             onClick={() => setActiveTab('calendar')}
           >
@@ -109,6 +117,9 @@ export default function App() {
           )}
           {activeTab === 'terms-and-groups' && (
             <TermsAndGroupsView />
+          )}
+          {activeTab === 'activities' && (
+            <ActivitiesView />
           )}
           {activeTab === 'calendar' && (
             <CalendarView />
