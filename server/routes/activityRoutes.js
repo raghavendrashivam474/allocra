@@ -2,12 +2,14 @@
 import {
   getActivities,
   createActivity,
-  updateActivityRelationships
+  updateActivityRelationships,
+  validateActivities
 } from '../controllers/activityController.js';
 
 const router = Router();
 
 router.get('/', getActivities);
+router.get('/validation', validateActivities);
 router.post('/', createActivity);
 router.put('/:id/relationships', updateActivityRelationships);
 

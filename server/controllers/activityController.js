@@ -1,4 +1,5 @@
 ﻿import * as activityService from '../core/institution/academic-context/activityService.js';
+import * as activityValidationService from '../core/institution/academic-context/activityValidationService.js';
 
 export async function getActivities(req, res, next) {
   try {
@@ -41,6 +42,15 @@ export async function updateActivityRelationships(req, res, next) {
     if (error.statusCode) {
       return res.status(error.statusCode).json({ error: error.message });
     }
+    next(error);
+  }
+}
+
+export async function validateActivities(req, res, next) {
+  try {
+    const result = await activityValidationService.validateConfiguration();
+    res.json(result);
+  } catch (error) {
     next(error);
   }
 }
