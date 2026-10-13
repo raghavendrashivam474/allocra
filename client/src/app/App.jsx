@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { checkHealth } from '../api/health';
 import SetupWorkspace from '../features/setup/SetupWorkspace';
 import InstitutionView from '../features/institution/InstitutionView';
@@ -9,6 +9,7 @@ import TimeModelView from '../features/time-model/TimeModelView';
 import FacultyView from '../features/faculty/FacultyView';
 import RoomsView from '../features/rooms/RoomsView';
 import ActivitiesView from '../features/activities/ActivitiesView';
+import ValidationWorkspace from '../features/validation/ValidationWorkspace';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('setup');
@@ -42,6 +43,13 @@ export default function App() {
             onClick={() => setActiveTab('setup')}
           >
             Setup Workspace
+          </button>
+          <button
+            type="button"
+            className={`allocra-nav-item ${activeTab === 'validation' ? 'active' : ''}`}
+            onClick={() => setActiveTab('validation')}
+          >
+            Validation
           </button>
 
           <div className="nav-section-label">Institution</div>
@@ -108,6 +116,9 @@ export default function App() {
         <main className="allocra-content" id="main-content">
           {activeTab === 'setup' && (
             <SetupWorkspace onNavigate={(tab) => setActiveTab(tab)} />
+          )}
+          {activeTab === 'validation' && (
+            <ValidationWorkspace onNavigate={(tab) => setActiveTab(tab)} />
           )}
           {activeTab === 'institution' && (
             <InstitutionView />
