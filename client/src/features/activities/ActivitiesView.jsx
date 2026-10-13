@@ -1,21 +1,32 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { fetchInstitution } from '../../api/institution';
 import { fetchGroups } from '../../api/academicContext';
-import { fetchActivities, createActivity } from '../../api/activities';
+import { fetchActivities, createActivity, updateActivityRelationships } from '../../api/activities';
+import { fetchFaculty } from '../../api/faculty';
+import { fetchRooms } from '../../api/rooms';
 import { Card, Alert, Button, LoadingState, EmptyState, PageHeader } from '../../components/ui';
 
 export default function ActivitiesView() {
   const [institution, setInstitution] = useState(null);
   const [groups, setGroups] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [allFaculty, setAllFaculty] = useState([]);
+  const [allRooms, setAllRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Form state
+  // Create form state
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState('');
   const [selectedGroupId, setSelectedGroupId] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  // Relationship editor state
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [selectedFacultyIds, setSelectedFacultyIds] = useState([]);
+  const [selectedRoomIds, setSelectedRoomIds] = useState([]);
+  const [savingRelationships, setSavingRelationships] = useState(false);
+  const [relationshipSuccess, setRelationshipSuccess] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -28,12 +39,16 @@ export default function ActivitiesView() {
       const instRes = await fetchInstitution();
       setInstitution(instRes.institution);
       if (instRes.institution) {
-        const [groupsRes, activitiesRes] = await Promise.all([
+        const [groupsRes, activitiesRes, facultyRes, roomsRes] = await Promise.all([
           fetchGroups(),
-          fetchActivities()
+          fetchActivities(),
+          fetchFaculty(),
+          fetchRooms()
         ]);
         setGroups(groupsRes.groups || []);
         setActivities(activitiesRes.activities || []);
+        setAllFaculty(facultyRes.faculty || []);
+        setAllRooms(roomsRes.rooms || []);
       }
     } catch (err) {
       setError(err.message);
@@ -64,6 +79,62 @@ export default function ActivitiesView() {
     }
   }
 
+  function handleConfigureActivity(activity) {
+    setSelectedActivity(activity);
+    setSelectedFacultyIds((activity.facultyIds || []).map(f => f._id));
+    setSelectedRoomIds((activity.roomIds || []).map(r => r._id));
+    setRelationshipSuccess(null);
+    setError(null);
+  }
+
+  function handleCancelConfigure() {
+    setSelectedActivity(null);
+    setSelectedFacultyIds([]);
+    setSelectedRoomIds([]);
+    setRelationshipSuccess(null);
+  }
+
+  function toggleFaculty(facultyId) {
+    setSelectedFacultyIds(prev =>
+      prev.includes(facultyId)
+        ? prev.filter(id => id !== facultyId)
+        : [...prev, facultyId]
+    );
+  }
+
+  function toggleRoom(roomId) {
+    setSelectedRoomIds(prev =>
+      prev.includes(roomId)
+        ? prev.filter(id => id !== roomId)
+        : [...prev, roomId]
+    );
+  }
+
+  async function handleSaveRelationships() {
+    if (!selectedActivity) return;
+    setSavingRelationships(true);
+    setError(null);
+    setRelationshipSuccess(null);
+    try {
+      const result = await updateActivityRelationships(selectedActivity._id, {
+        facultyIds: selectedFacultyIds,
+        roomIds: selectedRoomIds
+      });
+      setRelationshipSuccess('Relationships updated successfully');
+      setActivities(prev => prev.map(a =>
+        a._id === selectedActivity._id ? result.activity : a
+      ));
+      setTimeout(() => {
+        setSelectedActivity(null);
+        setRelationshipSuccess(null);
+      }, 1200);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSavingRelationships(false);
+    }
+  }
+
   if (loading) {
     return <LoadingState message="Loading academic activities..." />;
   }
@@ -90,6 +161,7 @@ export default function ActivitiesView() {
       />
 
       {error && <Alert type="error">{error}</Alert>}
+      {relationshipSuccess && <Alert type="success">{relationshipSuccess}</Alert>}
 
       <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
@@ -165,6 +237,96 @@ export default function ActivitiesView() {
         </Card>
       )}
 
+      {/* Relationship Editor */}
+      {selectedActivity && (
+        <Card title={`Configure Resources — ${selectedActivity.name}`} style={{ marginBottom: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            {/* Faculty Selection */}
+            <div>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: 'var(--color-text-primary, #0f172a)' }}>
+                Eligible Faculty ({selectedFacultyIds.length})
+              </h4>
+              {allFaculty.length === 0 ? (
+                <div style={{ fontSize: '13px', color: 'var(--color-text-muted, #64748b)', padding: '8px 0' }}>
+                  No faculty members available. Add faculty in the Faculty tab first.
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '200px', overflowY: 'auto' }}>
+                  {allFaculty.map(f => (
+                    <label
+                      key={f._id}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        padding: '6px 8px', borderRadius: '4px', cursor: 'pointer',
+                        fontSize: '13px',
+                        background: selectedFacultyIds.includes(f._id) ? 'var(--color-bg-subtle, #f1f5f9)' : 'transparent'
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedFacultyIds.includes(f._id)}
+                        onChange={() => toggleFaculty(f._id)}
+                        disabled={savingRelationships}
+                      />
+                      <span style={{ fontWeight: 500 }}>{f.name}</span>
+                      <span style={{ color: 'var(--color-text-muted, #64748b)', fontSize: '12px' }}>
+                        {f.departmentId?.name || ''}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Room Selection */}
+            <div>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: 'var(--color-text-primary, #0f172a)' }}>
+                Eligible Rooms ({selectedRoomIds.length})
+              </h4>
+              {allRooms.length === 0 ? (
+                <div style={{ fontSize: '13px', color: 'var(--color-text-muted, #64748b)', padding: '8px 0' }}>
+                  No rooms available. Add rooms in the Rooms tab first.
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '200px', overflowY: 'auto' }}>
+                  {allRooms.map(r => (
+                    <label
+                      key={r._id}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        padding: '6px 8px', borderRadius: '4px', cursor: 'pointer',
+                        fontSize: '13px',
+                        background: selectedRoomIds.includes(r._id) ? 'var(--color-bg-subtle, #f1f5f9)' : 'transparent'
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedRoomIds.includes(r._id)}
+                        onChange={() => toggleRoom(r._id)}
+                        disabled={savingRelationships}
+                      />
+                      <span style={{ fontWeight: 500 }}>{r.name}</span>
+                      <span style={{ color: 'var(--color-text-muted, #64748b)', fontSize: '12px' }}>
+                        {r.type} · {r.capacity} seats
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+            <Button type="button" variant="secondary" onClick={handleCancelConfigure} disabled={savingRelationships}>
+              Cancel
+            </Button>
+            <Button type="button" variant="primary" onClick={handleSaveRelationships} disabled={savingRelationships}>
+              {savingRelationships ? 'Saving...' : 'Save Relationships'}
+            </Button>
+          </div>
+        </Card>
+      )}
+
       {activities.length === 0 ? (
         <EmptyState
           message="No Activities Defined. Create your first academic activity to associate with groups."
@@ -180,6 +342,28 @@ export default function ActivitiesView() {
                 <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
                   Group: <strong>{act.groupId?.name || 'Unknown Group'}</strong>
                 </div>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
+                  <span style={{
+                    fontSize: '12px', padding: '2px 8px', borderRadius: '12px',
+                    background: 'var(--color-bg-subtle, #f1f5f9)', color: 'var(--color-text-secondary, #475569)', fontWeight: 500
+                  }}>
+                    {(act.facultyIds || []).length} Faculty
+                  </span>
+                  <span style={{
+                    fontSize: '12px', padding: '2px 8px', borderRadius: '12px',
+                    background: 'var(--color-bg-subtle, #f1f5f9)', color: 'var(--color-text-secondary, #475569)', fontWeight: 500
+                  }}>
+                    {(act.roomIds || []).length} Rooms
+                  </span>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => handleConfigureActivity(act)}
+                  style={{ marginTop: '0.5rem', alignSelf: 'flex-start' }}
+                >
+                  Configure Resources
+                </Button>
               </div>
             </Card>
           ))}
