@@ -24,3 +24,23 @@ export async function createActivity(req, res, next) {
     next(error);
   }
 }
+
+export async function updateActivityRelationships(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { facultyIds, roomIds } = req.body;
+    const activity = await activityService.updateActivityRelationships(id, {
+      facultyIds,
+      roomIds
+    });
+    res.json({
+      message: 'Activity relationships updated successfully',
+      activity
+    });
+  } catch (error) {
+    if (error.statusCode) {
+      return res.status(error.statusCode).json({ error: error.message });
+    }
+    next(error);
+  }
+}
