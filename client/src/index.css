@@ -689,3 +689,45 @@ button:focus-visible, input:focus-visible, select:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   UX-0: ACCESSIBILITY & FOUNDATION IMPROVEMENTS
+   ========================================================================== */
+
+/* Skip-to-content link — visible only on keyboard focus */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-md);
+  z-index: 100;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-text-inverted);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+/* Finding severity differentiation — left border by severity */
+.finding-error {
+  border-left: 4px solid var(--color-danger);
+}
+
+.finding-warning {
+  border-left: 4px solid var(--color-warning);
+}
+
+.finding-info {
+  border-left: 4px solid var(--color-info);
+}
+
+/* Content area centering on wide screens */
+.allocra-content {
+  margin: 0 auto;
+}

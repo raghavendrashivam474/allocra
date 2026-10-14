@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { checkHealth } from '../api/health';
 import SetupWorkspace from '../features/setup/SetupWorkspace';
 import InstitutionView from '../features/institution/InstitutionView';
@@ -23,6 +23,7 @@ export default function App() {
 
   return (
     <div className="allocra-container">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <header className="allocra-header">
         <div className="brand-wrap">
           <h1>ALLOCRA</h1>
