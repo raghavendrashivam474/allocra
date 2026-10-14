@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { fetchValidation } from '../../api/validation';
 import { Card, Alert, Button, LoadingState } from '../../components/ui';
 
@@ -10,9 +10,9 @@ const STATUS_LABELS = {
 };
 
 const SEVERITY_ICONS = {
-  error: '✕',
-  warning: '⚠',
-  info: 'ℹ'
+  error: '?',
+  warning: '?',
+  info: '?'
 };
 
 const SEVERITY_LABELS = {
@@ -71,7 +71,7 @@ export default function ValidationWorkspace({ onNavigate }) {
 
   return (
     <div className="validation-workspace">
-      {/* ── Summary Banner ── */}
+      {/* -- Summary Banner -- */}
       <div className="card setup-header-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px' }}>
           <div>
@@ -87,7 +87,7 @@ export default function ValidationWorkspace({ onNavigate }) {
 
         <div className={`readiness-banner ${isReady ? 'banner-ready' : 'banner-incomplete'}`}>
           <div className="banner-status-icon" aria-hidden="true">
-            {isReady ? '✓' : '⚠'}
+            {isReady ? '?' : '?'}
           </div>
           <div className="banner-content">
             <h3>{statusLabel}</h3>
@@ -111,7 +111,7 @@ export default function ValidationWorkspace({ onNavigate }) {
         </div>
       </div>
 
-      {/* ── Counts Grid ── */}
+      {/* -- Counts Grid -- */}
       {status !== 'not_configured' && status !== 'no_activities' && (
         <div className="setup-grid" style={{ marginTop: '16px' }}>
           <div className="card setup-item-card item-complete">
@@ -133,7 +133,7 @@ export default function ValidationWorkspace({ onNavigate }) {
         </div>
       )}
 
-      {/* ── Findings List ── */}
+      {/* -- Findings List -- */}
       {findings && findings.length > 0 && (
         <div style={{ marginTop: '24px' }}>
           <h3>Findings</h3>
@@ -141,7 +141,7 @@ export default function ValidationWorkspace({ onNavigate }) {
             {findings.map((f, idx) => (
               <div
                 key={`${f.code}-${f.entityId}-${idx}`}
-                className="card setup-item-card item-incomplete"
+                className={`card setup-item-card finding-${f.severity}`}
                 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}
               >
                 <div style={{ flex: 1, minWidth: '200px' }}>
@@ -178,14 +178,14 @@ export default function ValidationWorkspace({ onNavigate }) {
         </div>
       )}
 
-      {/* ── No Issues State ── */}
+      {/* -- No Issues State -- */}
       {isReady && findings && findings.length === 0 && (
         <Card title="All Clear" style={{ marginTop: '24px' }}>
           <p>No configuration issues detected. Your activities are ready for the next phase.</p>
         </Card>
       )}
 
-      {/* ── Navigation Links ── */}
+      {/* -- Navigation Links -- */}
       {status !== 'not_configured' && (
         <div style={{ marginTop: '24px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <Button variant="secondary" onClick={() => onNavigate && onNavigate('activities')}>

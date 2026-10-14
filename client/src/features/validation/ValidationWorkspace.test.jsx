@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ValidationWorkspace from './ValidationWorkspace';
@@ -155,6 +155,7 @@ describe('ValidationWorkspace Component', () => {
 
     // Findings verification
     expect(screen.getByText('Mathematics')).toBeInTheDocument();
+    expect(screen.getByText('Mathematics').closest('.finding-error')).toBeInTheDocument();
     expect(screen.getByText('No eligible faculty members are configured.')).toBeInTheDocument();
     expect(screen.getByText('Physics')).toBeInTheDocument();
     expect(screen.getByText('No eligible rooms are configured.')).toBeInTheDocument();
